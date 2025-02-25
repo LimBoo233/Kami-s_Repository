@@ -1,14 +1,31 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
+
+    public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged; 
+    public class OnSelectedCounterChangedEventArgs : EventArgs {
+        public ClearCounter selectedCounter;
+    }
 
     [SerializeField] private GameInput gameInput;
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private LayerMask countersLayerMask;
 
     private Vector3 lastInteractDir;
-
+    private ClearCounter selectedCounter;
+    
     private bool isWaling;
+
+    private void Start() {
+        gameInput.OnInteractAction += GameInput_OnInteractAction;
+    }
+
+    private void GameInput_OnInteractAction(object sender, EventArgs e) {
+        if (selectedCounter != null) {
+            selectedCounter.Interact();
+        }
+    }
 
     private void Update() {
         HandleMovement();
@@ -69,17 +86,26 @@ public class Player : MonoBehaviour {
         // 获取玩家标准化的移动向量
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
-
+    
         if (moveDir != Vector3.zero) {
             lastInteractDir = moveDir;
         }
-
+    
         float interactDistance = 2f;
         if (Physics.Raycast(transform.position, lastInteractDir, out RaycastHit raycastHit, interactDistance, countersLayerMask)) {
             if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter)) {
                 // 有clear counter
-                clearCounter.Interact();
+                if (clearCounter != selectedCounter) {
+                    selectedCounter = clearCounter;
+                    OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs { selectedCounter = selectedCounter });
+                }
+            } else {
+                selectedCounter = null;
+                OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs { selectedCounter = selectedCounter });
             }
+        } else {
+            selectedCounter = null;
+            OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs { selectedCounter = selectedCounter });
         }
     }
 }
