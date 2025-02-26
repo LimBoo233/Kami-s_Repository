@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-   public static Player Instance { get; set; }
+   public static Player Instance { get; private set; }
     
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged; 
     public class OnSelectedCounterChangedEventArgs : EventArgs {
@@ -18,6 +18,14 @@ public class Player : MonoBehaviour {
     private ClearCounter selectedCounter;
     
     private bool isWaling;
+
+    public void Awake() {
+        if (Instance != null) {
+            Debug.LogError("超过一个玩家Player实例");
+            return;
+        }
+        Instance = this;
+    }
 
     private void Start() {
         gameInput.OnInteractAction += GameInput_OnInteractAction;
