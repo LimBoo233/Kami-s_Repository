@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+   public static Player Instance { get; set; }
+    
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged; 
     public class OnSelectedCounterChangedEventArgs : EventArgs {
         public ClearCounter selectedCounter;
@@ -96,16 +98,18 @@ public class Player : MonoBehaviour {
             if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter)) {
                 // 有clear counter
                 if (clearCounter != selectedCounter) {
-                    selectedCounter = clearCounter;
-                    OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs { selectedCounter = selectedCounter });
+                   SetSelectedCounter(clearCounter);
                 }
             } else {
-                selectedCounter = null;
-                OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs { selectedCounter = selectedCounter });
+                SetSelectedCounter(null);
             }
         } else {
-            selectedCounter = null;
-            OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs { selectedCounter = selectedCounter });
+            SetSelectedCounter(null);
         }
+    }
+    
+    private void SetSelectedCounter(ClearCounter selectedCounter) {
+        this.selectedCounter = selectedCounter;
+        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs { selectedCounter = selectedCounter });
     }
 }
