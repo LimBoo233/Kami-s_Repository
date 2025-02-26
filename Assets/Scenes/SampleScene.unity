@@ -647,6 +647,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 449869169935579939, guid: e8c4b09ecfe88a7468d663be2eb0bdbd, type: 3}
+      propertyPath: kithKitchenObjectSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 2e489a8130b42ff44805257121db30c3, type: 2}
     - target: {fileID: 1471907314691951321, guid: e8c4b09ecfe88a7468d663be2eb0bdbd, type: 3}
       propertyPath: m_Layer
       value: 0
@@ -952,6 +956,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 449869169935579939, guid: e8c4b09ecfe88a7468d663be2eb0bdbd, type: 3}
+      propertyPath: kithKitchenObjectSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c06446aac912974dbea13e6a9ca82db, type: 2}
     - target: {fileID: 1471907314691951321, guid: e8c4b09ecfe88a7468d663be2eb0bdbd, type: 3}
       propertyPath: m_Layer
       value: 0
